@@ -59,7 +59,6 @@ class Store<State, Action>(
                 send(newAction)
             }
         }
-        Log.d("DEBUG", "${state.value}")
     }
 }
 

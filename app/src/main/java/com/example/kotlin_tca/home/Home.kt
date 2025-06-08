@@ -37,7 +37,7 @@ object HomeFeature : ReducerOf<HomeFeature.State, HomeFeature.Action> {
                 }
                 is Action.Counter -> {
                     when (val innerAction = action.action) {
-                        is CounterFeature.Action.DelayedIncrement -> {
+                        is CounterFeature.Action.DismissTapped -> {
                             state.copy(counter = null) to Effect.none()
                         }
                         else -> state to Effect.none()
@@ -54,17 +54,12 @@ object HomeFeature : ReducerOf<HomeFeature.State, HomeFeature.Action> {
 @Composable
 fun HomeScreen(store: StoreOf<HomeFeature.State, HomeFeature.Action>) {
     val state by store.state.collectAsState()
-    Log.d("DEBUG", "Home")
-    val counterStore = remember(state.counter) {
-        store.scope(
-            lens = HomeFeature.counterLens,
-            prism = HomeFeature.counterPrism
-        )
-    }
-
-    FullScreenNavigation(
-        item = counterStore,
-        screenContent = { store ->
+    
+    Navigation(
+        store = store,
+        lens = HomeFeature.counterLens,
+        prism = HomeFeature.counterPrism,
+        child = { store ->
             CounterScreen(store)
         }
     ) {
@@ -80,9 +75,9 @@ fun HomeScreen(store: StoreOf<HomeFeature.State, HomeFeature.Action>) {
                 Text("Go to Counter")
             }
             Button(onClick = {
-                store.send(HomeFeature.Action.SetTitle(state.title+"A"))
+                store.send(HomeFeature.Action.SetTitle(state.title))
             }) {
-                Text("Title")
+                Text("Title ")
             }
         }
     }

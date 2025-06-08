@@ -1,7 +1,5 @@
 package com.example.kotlin_tca.core.tca
 
-import com.example.kotlin_tca.core.tca.Effect
-
 interface ReducerOf<State, Action> {
     fun body(): ReducerOf<State, Action>
 
